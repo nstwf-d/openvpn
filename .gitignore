@@ -1,0 +1,10 @@
+.DS_Store
+bin/oath-orig.sh
+.env
+.provisioned
+/data/
+/log/
+/db/
+/clients/
+/staticclients/
+/pki/

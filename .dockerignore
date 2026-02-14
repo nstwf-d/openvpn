@@ -1,0 +1,7 @@
+pki/
+clients/
+db/
+log/
+staticclients/
+.git/
+.idea/

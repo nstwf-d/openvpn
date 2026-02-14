@@ -1,0 +1,32 @@
+services:
+  openvpn:
+    container_name: openvpn-dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: nstwf/opepvpn:dev
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    ports:
+      - "1194:1194/udp"
+      - "8080:8080/tcp"
+    environment:
+      OPENVPN_ADMIN_USERNAME: "admin"
+      OPENVPN_ADMIN_PASSWORD: "admin"
+      OVPN_REMOTE_HOST: "127.0.0.1"
+      OVPN_NETWORK: "10.0.70.0/24"
+      OVPN_GUEST_NETWORK: "10.0.71.0/24"
+      OVPN_HOME_NETWORK: "192.168.88.0/24"
+    volumes:
+      # Unified volume for all OpenVPN data (mapped to current dir)
+      - .:/etc/openvpn
+      
+      # Development mounts (Internal app paths to allow hot-reload of scripts)
+      - ./docker-entrypoint.sh:/opt/app/docker-entrypoint.sh
+      - ./bin:/opt/app/bin
+    cap_add:
+      - NET_ADMIN
+      - MKNOD
+    sysctls:
+      - net.ipv4.ip_forward=1
+    restart: "no"

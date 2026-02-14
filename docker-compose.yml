@@ -1,0 +1,28 @@
+services:
+  openvpn:
+    container_name: openvpn
+    image: nstwf/openvpn:latest
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    ports:
+      - "1194:1194/udp"
+      - "8080:8080/tcp"
+    environment:
+      OPENVPN_ADMIN_USERNAME: "${OPENVPN_ADMIN_USERNAME:-admin}"
+      OPENVPN_ADMIN_PASSWORD: "${OPENVPN_ADMIN_PASSWORD:-admin}"
+      OVPN_REMOTE_HOST: "${OVPN_REMOTE_HOST:-127.0.0.1}"
+      OVPN_NETWORK: "${OVPN_NETWORK:-10.0.70.0/24}"
+      OVPN_GUEST_NETWORK: "${OVPN_GUEST_NETWORK:-10.0.71.0/24}"
+      OVPN_HOME_NETWORK: "${OVPN_HOME_NETWORK:-192.168.88.0/24}"
+      OVPN_DNS_1: "${OVPN_DNS_1:-8.8.8.8}"
+      OVPN_DNS_2: "${OVPN_DNS_2:-1.0.0.1}"
+    volumes:
+      - ./data:/etc/openvpn
+      - ./log:/var/log/openvpn
+      - ./db:/opt/openvpn-ui/db
+    cap_add:
+      - NET_ADMIN
+      - MKNOD
+    sysctls:
+      - net.ipv4.ip_forward=1
+    restart: always

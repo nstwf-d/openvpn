@@ -1,0 +1,21 @@
+name: Build and Push Docker Image
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-push:
+    if: github.event_name != 'pull_request'
+
+    uses: nstwf-d/docker-ci/.github/workflows/docker-build-push.yaml@main
+    secrets: inherit
+    with:
+      image_version: latest
+      dockerhub_image: nstwf/${{ github.event.repository.name }}
+      ghcr_image: ghcr.io/${{ github.repository }}
